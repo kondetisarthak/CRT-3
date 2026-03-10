@@ -5,28 +5,33 @@
 <title>Hotel Management System</title>
 
 <style>
+
 body{
-font-family: Arial;
-background:#f4f4f4;
+font-family:Arial;
+background:linear-gradient(135deg,#6a11cb,#2575fc);
+margin:0;
+padding:0;
 }
 
 .container{
-width:400px;
-margin:50px auto;
+width:600px;
+margin:40px auto;
 background:white;
-padding:20px;
+padding:25px;
 border-radius:10px;
-box-shadow:0 0 10px gray;
+box-shadow:0 0 15px rgba(0,0,0,0.3);
 }
 
-h2{
+h2,h3{
 text-align:center;
 }
 
-input, select{
+input,select,textarea{
 width:100%;
 padding:10px;
 margin:8px 0;
+border-radius:5px;
+border:1px solid #ccc;
 }
 
 button{
@@ -35,41 +40,85 @@ padding:10px;
 background:#28a745;
 color:white;
 border:none;
-cursor:pointer;
 font-size:16px;
+cursor:pointer;
+border-radius:5px;
+margin-top:5px;
 }
 
 button:hover{
 background:#218838;
 }
 
-#result{
+table{
+width:100%;
 margin-top:15px;
-font-weight:bold;
-color:blue;
+border-collapse:collapse;
 }
+
+table,th,td{
+border:1px solid gray;
+}
+
+th,td{
+padding:8px;
+text-align:center;
+}
+
+.availability{
+background:#eef3ff;
+padding:10px;
+border-radius:6px;
+margin-bottom:15px;
+}
+
+.contact,.feedback{
+margin-top:20px;
+padding:15px;
+background:#f9f9f9;
+border-radius:8px;
+}
+
 </style>
 </head>
 
 <body>
 
 <div class="container">
-<h2>Hotel Booking</h2>
+
+<h2>Hotel Booking System</h2>
+
+<div class="availability">
+
+<h3>Room Availability</h3>
+
+<p>Single Rooms Available: <span id="singleCount">5</span></p>
+<p>Double Rooms Available: <span id="doubleCount">4</span></p>
+<p>Deluxe Rooms Available: <span id="deluxeCount">3</span></p>
+<p>Suite Rooms Available: <span id="suiteCount">2</span></p>
+
+</div>
 
 <form id="hotelForm">
 
 <label>Name</label>
 <input type="text" id="name" required>
 
+<label>Email</label>
+<input type="email" id="email" required>
+
 <label>Phone</label>
 <input type="text" id="phone" required>
 
+<label>Guests</label>
+<input type="number" id="guests" required>
+
 <label>Room Type</label>
 <select id="room">
-<option>Single Room</option>
-<option>Double Room</option>
-<option>Deluxe Room</option>
-<option>Suite</option>
+<option value="single">Single Room - ₹1000</option>
+<option value="double">Double Room - ₹1800</option>
+<option value="deluxe">Deluxe Room - ₹2500</option>
+<option value="suite">Suite - ₹4000</option>
 </select>
 
 <label>Check-in Date</label>
@@ -84,24 +133,179 @@ color:blue;
 
 <p id="result"></p>
 
+<h3>Booking History</h3>
+
+<table id="bookingTable">
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Room</th>
+<th>Days</th>
+<th>Total ₹</th>
+</tr>
+</table>
+
+
+<h3>Incoming Guests (Check-In)</h3>
+
+<table id="incomingTable">
+<tr>
+<th>Name</th>
+<th>Room</th>
+<th>Check-in</th>
+<th>Check-out</th>
+</tr>
+</table>
+
+
+<h3>Outgoing Guests (Check-Out)</h3>
+
+<table id="outgoingTable">
+<tr>
+<th>Name</th>
+<th>Room</th>
+<th>Check-out Date</th>
+</tr>
+</table>
+
+
+<div class="contact">
+
+<h3>Contact Us</h3>
+
+<p><b>Hotel Name:</b> Paradise Grand Hotel</p>
+<p><b>Address:</b> Rajampeta, Andhra Pradesh, India</p>
+<p><b>Phone:</b> +91 98765 43210</p>
+<p><b>Email:</b> paradisehotel@gmail.com</p>
+
+<h3>Location</h3>
+
+<iframe
+src="https://www.google.com/maps?q=rajampeta%20andhra%20pradesh&output=embed"
+width="100%"
+height="200"
+style="border:0;">
+</iframe>
+
+</div>
+
+
+<div class="feedback">
+
+<h3>Customer Rating & Feedback</h3>
+
+<select id="rating">
+<option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+<option value="4">⭐⭐⭐⭐ Good</option>
+<option value="3">⭐⭐⭐ Average</option>
+<option value="2">⭐⭐ Poor</option>
+<option value="1">⭐ Very Bad</option>
+</select>
+
+<textarea id="comment" placeholder="Write your feedback"></textarea>
+
+<button onclick="submitFeedback()">Submit Feedback</button>
+
+<p id="feedbackResult"></p>
+
+</div>
+
 </div>
 
 <script>
 
-document.getElementById("hotelForm").addEventListener("submit", function(e){
+let rooms={
+single:5,
+double:4,
+deluxe:3,
+suite:2
+};
+
+let roomPrices={
+single:1000,
+double:1800,
+deluxe:2500,
+suite:4000
+};
+
+document.getElementById("hotelForm").addEventListener("submit",function(e){
 
 e.preventDefault();
 
 let name=document.getElementById("name").value;
-let phone=document.getElementById("phone").value;
+
 let room=document.getElementById("room").value;
 
+let roomText=document.getElementById("room").selectedOptions[0].text;
+
+if(rooms[room]<=0){
+alert("Sorry! No rooms available");
+return;
+}
+
+rooms[room]--;
+document.getElementById(room+"Count").innerHTML=rooms[room];
+
+let roomPrice=roomPrices[room];
+
+let checkin=document.getElementById("checkin").value;
+let checkout=document.getElementById("checkout").value;
+
+let checkinDate=new Date(checkin);
+let checkoutDate=new Date(checkout);
+
+let days=(checkoutDate-checkinDate)/(1000*60*60*24);
+
+if(days<=0){
+alert("Invalid dates");
+return;
+}
+
+let total=roomPrice*days;
+
+let bookingID="HTL"+Math.floor(Math.random()*10000);
+
 document.getElementById("result").innerHTML=
-"Booking Confirmed for "+name+
-"<br>Room Type: "+room+
-"<br>Contact: "+phone;
+"Booking Confirmed ✔<br>"+
+"Booking ID: "+bookingID+
+"<br>Name: "+name+
+"<br>Room: "+roomText+
+"<br>Days: "+days+
+"<br>Total Bill: ₹"+total;
+
+let table=document.getElementById("bookingTable");
+
+let row=table.insertRow();
+
+row.insertCell(0).innerHTML=bookingID;
+row.insertCell(1).innerHTML=name;
+row.insertCell(2).innerHTML=roomText;
+row.insertCell(3).innerHTML=days;
+row.insertCell(4).innerHTML="₹"+total;
+
+
+/* Incoming table */
+
+let incomingTable=document.getElementById("incomingTable");
+
+let row1=incomingTable.insertRow();
+
+row1.insertCell(0).innerHTML=name;
+row1.insertCell(1).innerHTML=roomText;
+row1.insertCell(2).innerHTML=checkin;
+row1.insertCell(3).innerHTML=checkout;
 
 });
+
+
+function submitFeedback(){
+
+let rating=document.getElementById("rating").value;
+
+document.getElementById("feedbackResult").innerHTML=
+"Thank you for your feedback ⭐ Rating: "+rating+"/5";
+
+}
 
 </script>
 
