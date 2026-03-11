@@ -13,34 +13,43 @@ display:flex;
 justify-content:center;
 align-items:center;
 background:linear-gradient(135deg,#6a11cb,#2575fc);
-transition:0.4s;
 }
 
-/* Dark Mode */
+/* Flip Card */
 
-body.dark{
-background:#111;
-color:white;
+.container{
+perspective:1000px;
 }
-
-/* Card */
 
 .card{
-background:white;
-width:340px;
+width:350px;
+height:480px;
+position:relative;
+transform-style:preserve-3d;
+transition:0.8s;
+}
+
+.container:hover .card{
+transform:rotateY(180deg);
+}
+
+.front, .back{
+position:absolute;
+width:100%;
+height:100%;
+backface-visibility:hidden;
 border-radius:20px;
-text-align:center;
 padding:25px;
 box-shadow:0 10px 25px rgba(0,0,0,0.3);
-transition:0.3s;
+background:rgba(255,255,255,0.9);
+backdrop-filter:blur(10px);
+text-align:center;
 }
 
-body.dark .card{
-background:#1f1f1f;
-}
+/* Back Side */
 
-.card:hover{
-transform:translateY(-10px);
+.back{
+transform:rotateY(180deg);
 }
 
 /* Profile Image */
@@ -49,24 +58,21 @@ transform:translateY(-10px);
 width:120px;
 height:120px;
 border-radius:50%;
-border:5px solid #2575fc;
+border:4px solid #2575fc;
 }
 
-/* Role */
+/* Name */
+
+h2{
+margin:10px 0;
+}
+
+/* Typing Role */
 
 .role{
-color:gray;
-}
-
-body.dark .role{
-color:#bbb;
-}
-
-/* Bio */
-
-.bio{
-font-size:14px;
-margin:10px 0;
+color:#555;
+font-weight:bold;
+height:20px;
 }
 
 /* Stats */
@@ -101,10 +107,6 @@ background:#2575fc;
 
 /* Buttons */
 
-.buttons{
-margin-top:15px;
-}
-
 button{
 border:none;
 padding:10px 18px;
@@ -119,12 +121,8 @@ background:#2575fc;
 color:white;
 }
 
-.message{
-background:#eee;
-}
-
-body.dark .message{
-background:#444;
+.contact{
+background:#ff9800;
 color:white;
 }
 
@@ -140,16 +138,33 @@ font-size:20px;
 margin:8px;
 }
 
-/* Toggle */
+/* Glow Border */
 
-.toggle{
+.front{
+border:2px solid transparent;
+background-clip:padding-box;
+position:relative;
+}
+
+.front:before{
+content:"";
 position:absolute;
-top:20px;
-right:20px;
-padding:8px 15px;
+top:-2px;
+left:-2px;
+right:-2px;
+bottom:-2px;
+background:linear-gradient(45deg,#ff00cc,#3333ff);
 border-radius:20px;
-background:white;
-cursor:pointer;
+z-index:-1;
+filter:blur(6px);
+}
+
+/* Responsive */
+
+@media(max-width:400px){
+.card{
+width:90%;
+}
 }
 
 </style>
@@ -157,18 +172,19 @@ cursor:pointer;
 
 <body>
 
-<div class="toggle" onclick="toggleMode()">🌙 Dark</div>
+<div class="container">
 
 <div class="card">
+
+<!-- FRONT -->
+
+<div class="front">
 
 <img src="c:\Users\rashe\CrossDevice\iQOO Z9x 5G\Sarthak.jpeg" class="profile-img">
 
 <h2>Sarthak</h2>
-<p class="role">Frontend Developer</p>
 
-<p class="bio">Passionate about building modern web applications using HTML, CSS, JavaScript and Node.js.</p>
-
-<!-- Stats -->
+<p class="role" id="typing"></p>
 
 <div class="stats">
 <div>
@@ -187,8 +203,6 @@ cursor:pointer;
 </div>
 </div>
 
-<!-- Skills -->
-
 <div class="skill">
 HTML
 <div class="bar"><div class="progress" style="width:90%"></div></div>
@@ -204,19 +218,20 @@ JavaScript
 <div class="bar"><div class="progress" style="width:75%"></div></div>
 </div>
 
-<div class="skill">
-Node.js
-<div class="bar"><div class="progress" style="width:65%"></div></div>
-</div>
-
-<!-- Buttons -->
-
-<div class="buttons">
 <button class="follow">Follow</button>
-<button class="message">Message</button>
+
 </div>
 
-<!-- Social -->
+<!-- BACK -->
+
+<div class="back">
+
+<h2>Contact Me</h2>
+
+<p>Email: sarthak@example.com</p>
+<p>Phone: +91 9876543210</p>
+
+<button class="contact">Hire Me</button>
 
 <div class="social">
 <a href="#">🌐</a>
@@ -227,11 +242,26 @@ Node.js
 
 </div>
 
+</div>
+
+</div>
+
 <script>
 
-function toggleMode(){
-document.body.classList.toggle("dark");
+/* Typing Animation */
+
+let text="Frontend Developer";
+let i=0;
+
+function typing(){
+if(i<text.length){
+document.getElementById("typing").innerHTML+=text.charAt(i);
+i++;
+setTimeout(typing,80);
 }
+}
+
+typing();
 
 </script>
 
