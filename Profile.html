@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Advanced Profile Card</title>
+
+<style>
+
+body{
+font-family: Arial, sans-serif;
+margin:0;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#6a11cb,#2575fc);
+transition:0.4s;
+}
+
+/* Dark Mode */
+
+body.dark{
+background:#111;
+color:white;
+}
+
+/* Card */
+
+.card{
+background:white;
+width:340px;
+border-radius:20px;
+text-align:center;
+padding:25px;
+box-shadow:0 10px 25px rgba(0,0,0,0.3);
+transition:0.3s;
+}
+
+body.dark .card{
+background:#1f1f1f;
+}
+
+.card:hover{
+transform:translateY(-10px);
+}
+
+/* Profile Image */
+
+.profile-img{
+width:120px;
+height:120px;
+border-radius:50%;
+border:5px solid #2575fc;
+}
+
+/* Role */
+
+.role{
+color:gray;
+}
+
+body.dark .role{
+color:#bbb;
+}
+
+/* Bio */
+
+.bio{
+font-size:14px;
+margin:10px 0;
+}
+
+/* Stats */
+
+.stats{
+display:flex;
+justify-content:space-around;
+margin:15px 0;
+}
+
+.stats div{
+text-align:center;
+}
+
+/* Skills */
+
+.skill{
+text-align:left;
+margin:8px 0;
+}
+
+.bar{
+background:#ddd;
+border-radius:20px;
+overflow:hidden;
+}
+
+.progress{
+height:8px;
+background:#2575fc;
+}
+
+/* Buttons */
+
+.buttons{
+margin-top:15px;
+}
+
+button{
+border:none;
+padding:10px 18px;
+margin:5px;
+border-radius:20px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.follow{
+background:#2575fc;
+color:white;
+}
+
+.message{
+background:#eee;
+}
+
+body.dark .message{
+background:#444;
+color:white;
+}
+
+/* Social */
+
+.social{
+margin-top:15px;
+}
+
+.social a{
+text-decoration:none;
+font-size:20px;
+margin:8px;
+}
+
+/* Toggle */
+
+.toggle{
+position:absolute;
+top:20px;
+right:20px;
+padding:8px 15px;
+border-radius:20px;
+background:white;
+cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="toggle" onclick="toggleMode()">🌙 Dark</div>
+
+<div class="card">
+
+<img src="c:\Users\rashe\CrossDevice\iQOO Z9x 5G\Sarthak.jpeg" class="profile-img">
+
+<h2>Sarthak</h2>
+<p class="role">Frontend Developer</p>
+
+<p class="bio">Passionate about building modern web applications using HTML, CSS, JavaScript and Node.js.</p>
+
+<!-- Stats -->
+
+<div class="stats">
+<div>
+<h3>120</h3>
+<p>Followers</p>
+</div>
+
+<div>
+<h3>35</h3>
+<p>Projects</p>
+</div>
+
+<div>
+<h3>15</h3>
+<p>Repos</p>
+</div>
+</div>
+
+<!-- Skills -->
+
+<div class="skill">
+HTML
+<div class="bar"><div class="progress" style="width:90%"></div></div>
+</div>
+
+<div class="skill">
+CSS
+<div class="bar"><div class="progress" style="width:85%"></div></div>
+</div>
+
+<div class="skill">
+JavaScript
+<div class="bar"><div class="progress" style="width:75%"></div></div>
+</div>
+
+<div class="skill">
+Node.js
+<div class="bar"><div class="progress" style="width:65%"></div></div>
+</div>
+
+<!-- Buttons -->
+
+<div class="buttons">
+<button class="follow">Follow</button>
+<button class="message">Message</button>
+</div>
+
+<!-- Social -->
+
+<div class="social">
+<a href="#">🌐</a>
+<a href="#">💻</a>
+<a href="#">📷</a>
+<a href="#">🐦</a>
+</div>
+
+</div>
+
+<script>
+
+function toggleMode(){
+document.body.classList.toggle("dark");
+}
+
+</script>
+
+</body>
+</html>
